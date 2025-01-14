@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "fft-allergen-check",
+  "private_key_id": "559b75bc017a996df985b4e39df01bdff0c22826",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQC9IV6LezH+Lfuk\ncjIGWLdtIuDxoBQQU7CKr4itRbmIc6VsNdXT15G5fY3U2kcGVBPng4Y0LWJqKvtq\nrp5QHjPFkxRJIhv+NXgNuM5+hcMqbiQXqm0BYtob1Jx06m+yAtI8Bk6E0o8ujJ5O\nuRL1NwG9KpeRuNzCdBzsZ7cLiAt1xGjZJngyzw++5ttbTZIEt5PNFj/vGqtHzxjl\n+6OZOexxRbRvx7xZ1Mb9yVT6sUIWiS5swn7jJihvxgmM/uDDX0JAIr8uHzB7nwak\nlcPj2btJiIdWz+YDtD8coZf1h29nXlkMaWRvzsqDZ/vrBOQ4vDv9f1mwaMMUF+pV\n52s5HdSNAgMBAAECggEAALsIxPbVs3AqXoZsaAw0BTFod2EmwrC4ErO+jkDMiIOT\nL4RTuPebt1Y4qTUAp5HFPpSKUlhHNDbJ9YMK1y9kBCQ0egXY4CtaX98yDli7mhsx\nJirr3zX/trIkZT/kl5Dy4/V4Ry4TDIXRihH6n0Tg9ldG8kf/CPyZggDykD0BzP4o\nCtgfg5rGYxHbMCUODrofawGk8bI2ibE92Jixl9VvYIpmVSTSrJqjGJUxBgJHF9ga\nJdWOHQZcBKATQRwFFrbrlLAs5bLw7UvucTMm2iX4xuEXvBZmFv1A3+hoGIQ1KqGd\nA/SSfL5rsEJzT3kzZ1GZgBW60yPQ39UIsSIIotO34QKBgQDhze9C1HEMJbWjXEph\n3ZpIOqYCs3tzpC6GSW8IDSQ4PcuuFuyZC1HzkMyEk9u8L5Yx+QAgDRGDRqCIuK0i\nemD1HTJ+gFt6zprTcx/0OB14oEHJTVlS7UvjL44RiH1jlzAbN9quQkuyv9u23kes\ns9R6x5Ssxao+bB+Dj5l0p19k/QKBgQDWa/RGqmuBT82xVpJne7QnNQI8431GOoSO\nuwNmQ2tGAXrTvlLPnsEmHwDrgFCd4QWIZecp1huuG7z3dSiW8t1OtlA6vRiFvaz+\n+/DJeAFvIsBOn6ieJ8GmbDO2B5z9UFGnQwaYiJzHMR8opRSkCLGrntkSKvss3qra\nOAECVryK0QKBgQCE9bwTAADpBDNmU+vAoLo+GbqzEHh66Ywzqn3kochYDZsnkXwT\nyiShZPvofSAAOY0ZM+Os+8T6JdZVa1kXWjRJYL3g2zgCojFsnPeN2JUR+FuEazVT\nrULoLZJcJKCgyd+bx1HPFl54jJyVm2FdAi71dRvIeEP8qbIMx7u2gu+bCQKBgQDH\nL2Gsg4N6jHe31YQLPY8NHOEHTwyAwLuDG5b82IQ+dAF10cd7ty4WC5b/LiO1heNt\n4bvr0UnFY18XQW6DSvjqtdGxvxeYpaqe88uqXCB47P9YCljJEoWB4+HlpwzfBE3V\n4x2tdLqvD6KyTyfteWYS120uw16xP+fW70+ArLJZAQKBgQDTT8Zpsh1Y5DRMBHnN\nQgdFyUnxmW/6hCm1IiNQ3D/ZkzTNa7Xy8UngsDTCaQitc5M3CmFA/JgMbOb/ib8R\nFyc6Kl9opk037MiG2gHLj29pst8eYT2L03RbFoapyw5E+0JS4rzT+SMF4VQtR9yc\nVJ1E9v45dsJpMcmGo5Hb9o7D8w==\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-wz68k@fft-allergen-check.iam.gserviceaccount.com",
+  "client_id": "106339604105397409163",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-wz68k%40fft-allergen-check.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

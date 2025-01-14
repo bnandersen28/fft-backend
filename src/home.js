@@ -2,30 +2,37 @@ import React, { useState } from 'react';
 
 const Home = () => {
     const [recipeName, setRecipeName] = useState('');
-    const [ingredients, setIngredients] = useState('');
-    const [allergens, setAllergens] = useState('');
+    const [ingredients, setIngredients] = useState([]);
+    const [currentIngredient, setCurrentIngredient] = useState('');
 
+    const handleAddIngredient = () => {
+        if (currentIngredient.trim() !== '') {
+            setIngredients([...ingredients, currentIngredient.trim()]);
+            setCurrentIngredient('');
+        }
+    };
     const handleAddRecipe = async () => {
         const recipe = {
             name: recipeName,
-            ingredients: ingredients.split(',').map(item => item.trim()),
-            allergens: allergens.split(',').map(item => item.trim()),
+            ingredients,
         };
+        console.log(recipe);
 
         try {
-            const response = await fetch('http://localhost:5000/api/recipes', {
+            const response = await fetch('http://localhost:5002/api/recipes', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(recipe),
             });
+            console.log('Response:', response);
 
             if (response.ok) {
                 alert('Recipe added successfully!');
                 setRecipeName('');
-                setIngredients('');
-                setAllergens('');
+                setIngredients([]);
+                setCurrentIngredient('');
             } else {
                 throw new Error('Failed to add recipe');
             }
@@ -38,29 +45,40 @@ const Home = () => {
     return (
         <div style={{ textAlign: 'center', marginTop: '50px' }}>
             <h1>Welcome to the Recipe Manager</h1>
+            <div>
             <input
                 type="text"
                 value={recipeName}
                 placeholder="Recipe Name"
                 onChange={(e) => setRecipeName(e.target.value)}
-            />
-            <input
+             />
+            </div>
+            <div>
+                <input
                 type="text"
-                value={ingredients}
-                placeholder="Ingredients (comma-separated)"
-                onChange={(e) => setIngredients(e.target.value)}
+                value={currentIngredient}
+                placeholder="Add Ingredient"
+                onChange={(e) => setCurrentIngredient(e.target.value)}
             />
-            <input
-                type="text"
-                value={allergens}
-                placeholder="Allergens (comma-separated)"
-                onChange={(e) => setAllergens(e.target.value)}
-            />
-            <button onClick={handleAddRecipe} style={{ margin: '10px', padding: '10px 20px' }}>
-                Add Recipe
+            
+            <button onClick={handleAddIngredient} style={{ margin: '10px', padding: '10px 20px' }}>
+                Add Ingredient
             </button>
         </div>
-    );
+        <div>
+            <h3>Ingredients:</h3>
+            <u1>
+                {ingredients.map((ingredient, index) => (
+                    <li key={index}>{ingredient}</li>
+                ))}
+            </u1>
+        </div>
+        <button onClick={handleAddRecipe} style={{ margin: '20px', padding: '10px 20px' }}>
+            Save Recipe
+        </button>
+    </div>
+                    
+        );
 };
 
 export default Home;
