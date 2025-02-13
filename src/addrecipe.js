@@ -1,85 +1,92 @@
 // frontend/AddRecipe.js
 import React, { useState } from 'react';
-import { db } from '/firenbase'; //import firebase configuration
+import { useParams } from 'react-router-dom';
+import { db } from './firebase'; //import firebase configuration
 import { doc, setDoc, updateDoc, arrayUnion } from 'firebase/firestore';  
 
 const AddRecipe = () => {
-    const [name, setName] = useState('');
-    const [ingredient, setIngredients] = useState('');
-    const [ingredientsList, setIngredientsList] = useState([]);
-    cosnt [isNameSubmitted, setIsNameSubmitted] = useState(false);
-
-    const handleAddRecipeName = async () => {
-
-        if(!name.trim()){
-            alert('Please enter a recipe name');
-            return;
+    let { category } = useParams();
+    const [recipeName, setRecipeName] = useState('');
+    const [ingredients, setIngredients] = useState([]);
+    const [currentIngredient, setCurrentIngredient] = useState('');
+    
+    const handleAddIngredient = () => {
+        if (currentIngredient.trim() !== '') {
+            setIngredients([...ingredients, currentIngredient.trim()]);
+            setCurrentIngredient('');
         }
-        try{
-            await setDoc(doc(db, 'recipes', name), {
-                name, 
-                ingredients: [],//Initialize with an emptry array to later add to
-            });
-            setIsNameSubmitted(true);
-            alert('Recipe name added successfully');
-        }
-                catch (error) {
-                    console.error('Error adding recipe name:', error);
-                    alert('Failed to add recipe name');
-            }
     };
 
-    //Add Ingredients to Firebase
-    const handleAddIngredients = async () => {
-        if(!ingredient.trim()){
-            alert('Please enter an ingredient');
-            return;
+    const handleAddRecipe = async () => {
+        const recipe = {
+            name: recipeName,
+            ingredients,
+        };
+        console.log(recipe);
+
+        try {
+            const response = await fetch('http://localhost:5002/api/recipes', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(recipe),
+            });
+            console.log('Response:', response);
+
+            if (response.ok) {
+                alert('Recipe added successfully!');
+                setRecipeName('');
+                setIngredients([]);
+                setCurrentIngredient('');
+            } else {
+                throw new Error('Failed to add recipe');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Error adding recipe');
         }
-        try{
-            const recipeRef = doc(db, 'recipes', name);
-            await updateDoc(recipeRef, {
-                ingredients: arrayUnion(ingredient),
-        });
-        setIngredientsList((prev)=> [...prev, ingredient]);
-        setIngredients('');
-        alert('Ingredient added successfully');
-    } catch (error) {
-        console.error('Error adding ingredient:', error);
-        alert('Failed to add ingredient');
-    }
-};
+    };
 
     return (
-        <div>
-            <h2>Add Recipe</h2>
-            {!isNameSubmitted ? (
-            <>
-            <input
-                type="text"
-                placeholder="Recipe Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-            />
-            <button onClick={handleAddRecipeName}>Add Recipe Name</button>
-            </>
-            ) : (
-                <>
-                <h3>Recipe: {name}</h3>
-            <input
-                type="text"
-                placeholder="Ingredient Name"
-                value={ingredients}
-                onChange={(e) => setIngredients(e.target.value)}
-            />
-            <button onClick={handleAddIngredients}>Add Ingredient</button>
-            <h4> Ingredients Added:</h4>
-            <u1>
-                {ingredientsList.map((ing, index)=>{
-                    <li key={index}>{ing}</li>
-                })}
-            </u1>
-            </>
-            )}
+        <div style={{ textAlign: 'center', marginTop: '50px' }}>
+            <h1>Add a Recipe for {category.charAt(0).toUpperCase() + category.slice(1)}</h1>
+            <div>
+                <input
+                    type="text"
+                    value={recipeName}
+                    placeholder="Recipe Name"
+                    onChange={(e) => setRecipeName(e.target.value)}
+                />
+            </div>
+            <div>
+                <input
+                    type="text"
+                    value={currentIngredient}
+                    placeholder="Add Ingredient"
+                    onChange={(e) => setCurrentIngredient(e.target.value)}
+                />
+                <button
+                    onClick={handleAddIngredient}
+                    style={{ margin: '10px', padding: '10px 20px' }}
+                >
+                    Add Ingredient
+                </button>
+            </div>
+            <div>
+                <h3>Ingredients:</h3>
+                <ul>
+                    {ingredients.map((ingredient, index) => (
+                        <li key={index}>{ingredient}</li>
+                    ))}
+                </ul>
+            </div>
+            <button
+                onClick={handleAddRecipe}
+                style={{ margin: '20px', padding: '10px 20px' }}
+            >
+                Save Recipe
+            </button>
         </div>
     );
 };

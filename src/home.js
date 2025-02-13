@@ -1,81 +1,44 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
-    const [recipeName, setRecipeName] = useState('');
-    const [ingredients, setIngredients] = useState([]);
-    const [currentIngredient, setCurrentIngredient] = useState('');
 
-    const handleAddIngredient = () => {
-        if (currentIngredient.trim() !== '') {
-            setIngredients([...ingredients, currentIngredient.trim()]);
-            setCurrentIngredient('');
-        }
-    };
-    const handleAddRecipe = async () => {
-        const recipe = {
-            name: recipeName,
-            ingredients,
-        };
-        console.log(recipe);
+    const navigate = useNavigate();
 
-        try {
-            const response = await fetch('http://localhost:5002/api/recipes', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(recipe),
-            });
-            console.log('Response:', response);
-
-            if (response.ok) {
-                alert('Recipe added successfully!');
-                setRecipeName('');
-                setIngredients([]);
-                setCurrentIngredient('');
-            } else {
-                throw new Error('Failed to add recipe');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            alert('Error adding recipe');
-        }
+    const handleCategoryClick = (category) => {
+        navigate(`/recipe/${category}`);
     };
 
     return (
         <div style={{ textAlign: 'center', marginTop: '50px' }}>
             <h1>Welcome to the Recipe Manager</h1>
             <div>
-            <input
-                type="text"
-                value={recipeName}
-                placeholder="Recipe Name"
-                onChange={(e) => setRecipeName(e.target.value)}
-             />
-            </div>
-            <div>
-                <input
-                type="text"
-                value={currentIngredient}
-                placeholder="Add Ingredient"
-                onChange={(e) => setCurrentIngredient(e.target.value)}
-            />
-            
-            <button onClick={handleAddIngredient} style={{ margin: '10px', padding: '10px 20px' }}>
-                Add Ingredient
+            <button 
+                onClick={() => handleCategoryClick('appetizers')}
+                style={{ margin: '10px', padding: '10px 20px' }}>
+                    Appetizers
+            </button>
+            <button
+                onClick={()=> handleCategoryClick('soups') }
+                style={{ margin: '10px', padding: '10px 20px' }}>
+                    Soups
+            </button>
+            <button
+                onClick={()=> handleCategoryClick('salads') }
+                style={{ margin: '10px', padding: '10px 20px' }}>
+                    Salads
+            </button>
+            <button
+                onClick={()=> handleCategoryClick('sandwhiches') }
+                style={{ margin: '10px', padding: '10px 20px' }}>
+                    Sandwhiches
+            </button>
+            <button
+                onClick={()=> handleCategoryClick('entrees') }
+                style={{ margin: '10px', padding: '10px 20px' }}>
+                    Entrees
             </button>
         </div>
-        <div>
-            <h3>Ingredients:</h3>
-            <u1>
-                {ingredients.map((ingredient, index) => (
-                    <li key={index}>{ingredient}</li>
-                ))}
-            </u1>
-        </div>
-        <button onClick={handleAddRecipe} style={{ margin: '20px', padding: '10px 20px' }}>
-            Save Recipe
-        </button>
     </div>
                     
         );

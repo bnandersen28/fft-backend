@@ -2,7 +2,8 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Login from './Login';
 import Home from './home';
-; // Replace with your actual dashboard component
+import AddRecipe from './addrecipe';
+
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/addrecipe/:category" element={<AddRecipe />}  />
       </Routes>
     </Router>
   );
