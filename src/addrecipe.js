@@ -1,94 +1,44 @@
-// frontend/AddRecipe.js
-import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { db } from './firebase'; //import firebase configuration
-import { doc, setDoc, updateDoc, arrayUnion } from 'firebase/firestore';  
+//src/api/addrecipe.js
+import { collection, doc, setDoc,updateDoc, serverTimestamp } from 'firebase/firestore';
+import { db } from './firebase';
 
-const AddRecipe = () => {
-    let { category } = useParams();
-    const [recipeName, setRecipeName] = useState('');
-    const [ingredients, setIngredients] = useState([]);
-    const [currentIngredient, setCurrentIngredient] = useState('');
+/**
+ * Adds a recipe to Firestore 'recipes' collection
+ * @param {Object} data - Recipe Data
+ * @param {string} data.name - Name of the recipe
+ * @param {string} data.category - Category of the recipe
+ * @param {Array} data.ingredients - List of ingredients
+ * @param {Array} data.allergens - Optional allergens
+ * @param {Array<string>} data.subingredients - List of sub-ingredients
+ * @param {Array<string>} data.crosscontamination - List of cross-contamination ingredients
+ */
+export const addRecipe = async ({ name, category, ingredientIds, allergens = [], subingredients = [], crosscontamination = [] }) => {
+
+    const id = name.trim().toLowerCase().replace(/\s+/g, '-'); // e.g. "Cream Sauce" → "cream-sauce"
+
+    const recipeRef = doc(collection(db, 'recipes'), id); // use custom ID
     
-    const handleAddIngredient = () => {
-        if (currentIngredient.trim() !== '') {
-            setIngredients([...ingredients, currentIngredient.trim()]);
-            setCurrentIngredient('');
-        }
-    };
-
-    const handleAddRecipe = async () => {
-        const recipe = {
-            name: recipeName,
-            ingredients,
-        };
-        console.log(recipe);
-
-        try {
-            const response = await fetch('http://localhost:5002/api/recipes', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(recipe),
-            });
-            console.log('Response:', response);
-
-            if (response.ok) {
-                alert('Recipe added successfully!');
-                setRecipeName('');
-                setIngredients([]);
-                setCurrentIngredient('');
-            } else {
-                throw new Error('Failed to add recipe');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            alert('Error adding recipe');
-        }
-    };
-
-    return (
-        <div style={{ textAlign: 'center', marginTop: '50px' }}>
-            <h1>Add a Recipe for {category.charAt(0).toUpperCase() + category.slice(1)}</h1>
-            <div>
-                <input
-                    type="text"
-                    value={recipeName}
-                    placeholder="Recipe Name"
-                    onChange={(e) => setRecipeName(e.target.value)}
-                />
-            </div>
-            <div>
-                <input
-                    type="text"
-                    value={currentIngredient}
-                    placeholder="Add Ingredient"
-                    onChange={(e) => setCurrentIngredient(e.target.value)}
-                />
-                <button
-                    onClick={handleAddIngredient}
-                    style={{ margin: '10px', padding: '10px 20px' }}
-                >
-                    Add Ingredient
-                </button>
-            </div>
-            <div>
-                <h3>Ingredients:</h3>
-                <ul>
-                    {ingredients.map((ingredient, index) => (
-                        <li key={index}>{ingredient}</li>
-                    ))}
-                </ul>
-            </div>
-            <button
-                onClick={handleAddRecipe}
-                style={{ margin: '20px', padding: '10px 20px' }}
-            >
-                Save Recipe
-            </button>
-        </div>
-    );
+     await setDoc(recipeRef, {
+        name,
+        category,
+        ingredientIds,
+        allergens,
+        subingredients,
+        crosscontamination,
+        createdAt: serverTimestamp()
+    });
+    return id;
 };
 
-export default AddRecipe;
+/**
+ * Edit recipe info based on an id
+ */
+export const updateRecipe = async (id, data)=>{
+    try{
+        const recipeRef= doc(db, "recipes",id);
+        await updateDoc(recipeRef, data);
+        console.log("Recipe updated successfully");
+    }catch(error){
+        console.error("Error updating recipe:", error);
+    }
+};

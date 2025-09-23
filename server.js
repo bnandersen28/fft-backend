@@ -3,6 +3,7 @@ const admin = require('firebase-admin');
 const cors = require('cors');
 const express = require('express');
 const bodyParser = require('body-parser');
+const { checkAllergens } = require('./src/checkAllergens');
 
 const serviceAccount = require('./fft-allergen-check-firebase-admin.json');
 admin.initializeApp({
@@ -39,6 +40,19 @@ app.post('/api/recipes', async (req, res) => {
   } catch (error) {
     console.error('Error adding recipe:', error);
     res.status(500).send('Failed to add recipe');
+  }
+});
+
+
+//API to check an allergen 
+app.post("/api/check-allergens", async (req, res) => {
+  try {
+    const { mainId, sides, dressings, additionals, allergens } = req.body;
+    const result = await checkAllergens(mainId, sides, dressings, additionals, allergens);
+    res.json(result);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
   }
 });
 
