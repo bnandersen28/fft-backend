@@ -4,6 +4,7 @@ const cors = require('cors');
 const express = require('express');
 const bodyParser = require('body-parser');
 const { checkAllergens } = require('./src/checkAllergens');
+const path = require("path");
 
 const serviceAccount = require('./fft-allergen-check-firebase-admin.json');
 admin.initializeApp({
@@ -14,10 +15,9 @@ admin.initializeApp({
 const app = express();
 app.use(bodyParser.json());
 
-app.use(cors({
-  origin: 'http://localhost:3000', // Replace with your client URL
-  methods: ['POST', 'GET', 'OPTIONS'],
-}));
+
+
+app.use(cors());
 
 
 // API route to add a recipe
@@ -55,6 +55,17 @@ app.post("/api/check-allergens", async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 });
+
+// 🔹 Serve React build in production
+if (process.env.NODE_ENV === "production") {
+  const buildPath = path.join(__dirname, "build");
+  app.use(express.static(buildPath));
+
+  // serve index.html for any unknown route (React handles routing)
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(buildPath, "index.html"));
+  });
+}
 
 const PORT = process.env.PORT || 5002;
 app.listen(PORT, () => {
