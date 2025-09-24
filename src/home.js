@@ -12,9 +12,9 @@ const Home = () => {
 
     const [showForm, setShowForm] = useState(false);
 
-    // const [showNotes, setShowNotes] = useState(false);
-    // const [notes, setNotes] = useState([]);
-    // const [newNote, setNewNote] = useState("");
+    const [showNotes, setShowNotes] = useState(false);
+    const [notes, setNotes] = useState([]);
+    const [newNote, setNewNote] = useState("");
 
 
     const [entrees, setEntrees] = useState([]);
@@ -33,31 +33,31 @@ const Home = () => {
     const [ingredients, setIngredients] = useState([]);
 
     //Load notes
-    // useEffect(() => {
-    //     async function loadNotes() {
-    //         const snapshot = await getDocs(collection(db, "notes"));
-    //         const notesList = snapshot.docs.map((doc) => ({
-    //             id: doc.id,
-    //             ...doc.data(),
-    //         }));
-    //         setNotes(notesList);
-    //     }
-    //     loadNotes();
-    // }, []);
+    useEffect(() => {
+        async function loadNotes() {
+            const snapshot = await getDocs(collection(db, "notes"));
+            const notesList = snapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
+            }));
+            setNotes(notesList);
+        }
+        loadNotes();
+    }, []);
 
-    // //Add note
-    // const addNote = async () => {
-    //     if (!newNote.trim()) return;
-    //     const docRef = await addDoc(collection(db, "notes"), { text: newNote.trim() });
-    //     setNotes([...notes, { id: docRef.id, text: newNote.trim() }]);
-    //     setNewNote("");
-    // };
+    //Add note
+    const addNote = async () => {
+        if (!newNote.trim()) return;
+        const docRef = await addDoc(collection(db, "notes"), { text: newNote.trim() });
+        setNotes([...notes, { id: docRef.id, text: newNote.trim() }]);
+        setNewNote("");
+    };
 
-    // //Delete note
-    // const deleteNote = async (id) => {
-    //     await deleteDoc(doc(db, "notes", id));
-    //     setNotes(notes.filter((note) => note.id !== id));
-    // };
+    //Delete note
+    const deleteNote = async (id) => {
+        await deleteDoc(doc(db, "notes", id));
+        setNotes(notes.filter((note) => note.id !== id));
+    };
 
     // 🔹 Load categories from Firestore
     useEffect(() => {
@@ -115,8 +115,8 @@ const Home = () => {
             <h1>Food For Thought Recipe Manager</h1>
             <div className='home-row'>
                 <div className='left'>
-                    {/* Notes Section
-                    <button style={{ padding: "20px", height: "50px" }} onClick={() => setShowNotes(!showNotes)}>
+                    {/* Notes Section */}
+                    <button style={{ padding: "20px", height: "50px" , margin: "10px 0" }} onClick={() => setShowNotes(!showNotes)}>
                         {showNotes ? "Close Notes" : "Notes"}
                     </button>
 
@@ -140,7 +140,7 @@ const Home = () => {
                                 ))}
                             </ul>
                         </div>
-                    )} */}
+                    )}
                     <button style={{ padding: "20px", height: "50px" }} onClick={() => setShowForm(!showForm)}>
 
                         {showForm ? "Close Allergen Checker" : "Check Allergens"}
