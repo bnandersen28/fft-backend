@@ -107,7 +107,7 @@ async function checkAllergens(mainId, sides = [], dressings = [], additionals = 
         }
         console.log("Final messages:", messages);
         if (messages.length === 0) {
-            messages.push(`✅ No allergens were found for in ${recipeName}`);
+            messages.push(`✅ No allergens were found in ${recipeName}`);
         }
     }
 

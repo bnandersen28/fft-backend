@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import benfrank from './benfrank.webp'; // adjust path as needed
+import benfrank from './benfrank.jpg'; // adjust path as needed
 import { db } from './firebase'; // adjust path as needed
 import { collection, getDocs, addDoc, deleteDoc, doc } from 'firebase/firestore';
 import { useEffect } from 'react';
@@ -22,12 +22,15 @@ const Home = () => {
     const [sides, setSides] = useState([]);
     const [dressings, setDressings] = useState([]);
     const [soupsSalads, setSoupsSalads] = useState([]);
+    const [desserts, setDesserts] = useState([]);
 
     const [selectedEntree, setSelectedEntree] = useState("");
     const [selectedAppetizers, setSelectedAppetizers] = useState([]); // multiple
     const [selectedSoupsSalads, setSelectedSoupsSalads] = useState([]); // multiple
     const [selectedSides, setSelectedSides] = useState([]); // multiple
     const [selectedDressings, setSelectedDressings] = useState([]); // multiple
+    const [selectedDesserts, setSelectedDesserts] = useState([]); // multiple
+    
     const [allergens, setAllergens] = useState("");
     const [results, setResults] = useState([]);
     const [ingredients, setIngredients] = useState([]);
@@ -68,14 +71,18 @@ const Home = () => {
                 ...doc.data(),
             }));
 
-            setEntrees(list.filter((r) => r.category === "entrees"));
+            setEntrees([
+                ...list.filter((r) => r.category === "entrees"),
+                ...list.filter((r) => r.category === "sandwiches"),
+            ]);
             setSides(list.filter((r) => r.category === "sides"));
             setDressings(list.filter((r) => r.category === "dressings"));
             setSoupsSalads([
                 ...list.filter((r) => r.category === "soups"),
                 ...list.filter((r) => r.category === "salads")
             ]);
-              setAppetizers(list.filter((r) => r.category === "appetizers")); // ✅ new
+            setAppetizers(list.filter((r) => r.category === "appetizers")); 
+            setDesserts(list.filter((r) => r.category === "desserts"));
         }
         loadRecipes();
     }, []);
@@ -90,7 +97,7 @@ const Home = () => {
                 mainId: selectedEntree,
                 sides: selectedSides,
                 dressings: selectedDressings,
-                additionals: [...selectedSoupsSalads, ...selectedAppetizers],
+                additionals: [...selectedSoupsSalads, ...selectedAppetizers, ...selectedDesserts],
                 allergens: allergens.split(",").map((a) => a.trim())
             }),
         });
@@ -106,12 +113,14 @@ const Home = () => {
     };
 
     const handleCategoryClick = (category) => {
-        navigate(`/recipe/${category}`);
+        navigate(`/category/${category}`);
     };
 
     return (
         <div className="home">
+            <div className='logo-div'>
             <img src={benfrank} alt="Ben Franklin" />
+            </div>
             <h1>Food For Thought Recipe Manager</h1>
             <div className='home-row'>
                 <div className='left'>

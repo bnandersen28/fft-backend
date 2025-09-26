@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import {
     collection,
     query,
@@ -10,6 +10,7 @@ import { db } from './firebase';
 import { addRecipe } from './addrecipe';
 import { updateRecipe } from './addrecipe';
 import { use } from 'react';
+
 
 
 const RecipeCategoryPage = () => {
@@ -29,6 +30,8 @@ const RecipeCategoryPage = () => {
 
     //Inline edit form
     const [formData, setFormData] = useState({});
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         const q = query(
@@ -123,14 +126,14 @@ const RecipeCategoryPage = () => {
 
     return (
         <>
-            <div class="recipes-top">   
-            <div className="back-button" onClick={() => window.history.back()}>Back</div>
+            <div class="recipes-top">
+                <div className="back-button" onClick={() => window.history.back()}>Back</div>
                 <h2> {category}</h2>
 
                 <button onClick={() => setShowForm(!showForm)}>
                     {'Add Recipe'}
                 </button>
-            
+
 
                 {showForm && (
                     <form onSubmit={handleSubmit} style={{ marginTop: '20px' }}>
@@ -179,85 +182,22 @@ const RecipeCategoryPage = () => {
                         </button>
                     </form>
                 )}
-                </div>
-                <div className="recipes">
+            </div>
+            <div className="recipes">
                 <h3 style={{ marginTop: '40px' }}>{category.charAt(0).toUpperCase() + category.slice(1)} Recipes</h3>
-                <ul>
+                <div className="recipe-grid">
                     {recipes.map((recipe) => (
-                        <li key={recipe.id}>
-                            <div
-                                style={{ cursor: 'pointer', fontWeight: 'bold' }}
-                                onClick={() =>
-                                    setExpandedId(expandedId === recipe.id ? null : recipe.id)}
-                            >
-                                {recipe.name}</div>
-                            {expandedId === recipe.id && (
-                                <div style={{ marginLeft: '15px', marginTop: '10px' }} >
-                                    {editingId == recipe.id ? (
-                                        <>
-                                            <div>
-                                                <label>Name:</label>
-                                                <input
-                                                    value={formData.name || ''}
-                                                    style={{ width: '500px' }}
-                                                    onChange={(e) => handleInputChange('name', e.target.value)}
-                                                />
-                                            </div>
-                                            <div>
-                                                <label>Ingredients (comma seperated):</label>
-                                                <input
-                                                    value={formData.ingredientIds || ''}
-                                                    style={{ width: '500px' }}
-                                                    onChange={(e) => handleInputChange('ingredientIds', e.target.value)}
-                                                />
-                                            </div>
-                                            <div>
-                                                <label>Allergens (comma separated):</label>
-                                                <input
-                                                    value={formData.allergens || ''}
-                                                    style={{ width: '500px' }}
-                                                    onChange={(e) => handleInputChange('allergens', e.target.value)}
-                                                />
-                                            </div>
-                                            <div>
-                                                <label>Sub-Ingredients (comma separated):</label>
-                                                <input
-                                                    value={formData.subingredients || ''}
-                                                    style={{ width: '500px' }}
-                                                    onChange={(e) => handleInputChange('subingredients', e.target.value)}
-                                                />
-                                            </div>
-                                            <div>
-                                                <label>Cross-Contamination (comma separated):</label>
-                                                <input
-                                                    value={formData.crosscontamination || ''}
-                                                    style={{ width: '500px' }}
-                                                    onChange={(e) => handleInputChange('crosscontamination', e.target.value)}
-                                                />
-                                            </div>
-                                            <button onClick={() => handleSave(recipe.id)}>Save</button>
-                                            <button onClick={() => setEditingId(null)}>Cancel</button>
-                                        </>
-                                    ) : (
-                                        <>
-
-                                            <p>Ingredients: {recipe.ingredientIds?.join(', ') || 'None'}</p>
-                                            <p>Allergens: {recipe.allergens?.join(', ') || 'None'}</p>
-                                            <p>Sub-Ingredients: {recipe.subingredients?.join(', ') || 'None'}</p>
-                                            <p>Cross-Contamination: {recipe.crosscontamination?.join(', ') || 'None'}</p>
-                                            <button
-                                                style={{ marginLeft: '10px' }}
-                                                onClick={() => startEdit(recipe)}
-                                            >
-                                                Edit
-                                            </button>
-                                        </>
-                                    )}
-                                </div>
-                            )}
-                                </li>
+                        <div
+                            key={recipe.id}
+                            className="recipe-box"
+                            onClick={() =>
+                                navigate(`/recipe/${recipe.id}`, { state: { category } })}
+                        >
+                            <h4> {recipe.name}</h4>
+                        </div>
                     ))}
-                </ul>
+
+                </div>
             </div>
         </>
     );

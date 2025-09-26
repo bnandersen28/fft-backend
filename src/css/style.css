@@ -1,182 +1,235 @@
 /* General Reset */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  /* Body styles */
-  body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f0f0f0; /* Light background for the page */
-    min-height: 100vh;
-    
-  }
-  
-  /* Container for centering the login box */
-  .login-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100vh;
-  }
-  
-  /* Styling the login box */
-  .login-box {
-    background-color: white;
-    padding: 40px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); /* Light shadow */
-    max-width: 400px;
-    width: 100%;
-  }
-  
-  /* Heading styles */
-  .login-box h1 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #333;
-  }
-  
-  /* Input and Label styles */
-  .login-box label {
-    display: block;
-    margin-bottom: 5px;
-    font-size: 16px;
-    color: #333;
-  }
-  
-  .login-box input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 20px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 16px;
-    background-color: #fafafa;
-    transition: border-color 0.3s ease;
-  }
-  
-  /* Change input border color on focus */
-  .login-box input:focus {
-    border-color: #6d5dfc;
-    outline: none;
-  }
-  
-  /* Button styles */
-  .login-box button {
-    width: 100%;
-    padding: 10px;
-    background-color: #6d5dfc;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .login-box button:hover {
-    background-color: #574bfc; /* Darken on hover */
-  }
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-  /*Recipe page*/
-  .home{
-    background-color: #f0f0f0;
-    height: 100vh;
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-  }
+/* Body styles */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f0f0f0;
+  /* Light background for the page */
+  min-height: 100vh;
 
-  .home img{
-    width: 400px;
-    height: 400px;
-    margin-top: 20px;
-  }
-  .home-row{
-    display: flex;
-    flex-direction: row;
-  }
-  .left{
-    width: 50%;
-    display: flex;
-    flex-direction: column;
-  }
+}
 
-  
+/* Container for centering the login box */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+}
 
-  .home h1{
-    margin: 20px;
-    color: #333;
-  }
+/* Styling the login box */
+.login-box {
+  background-color: white;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  /* Light shadow */
+  max-width: 400px;
+  width: 100%;
+}
 
-  .categories{
-    display: flex;
-    flex-direction: column;
-    width: 50%;
-    justify-content: center;
-    
-  }
+/* Heading styles */
+.login-box h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
 
-  .back-button{
-    width: 75px;
-    height: 50px;
-    background-color: #311aff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    text-align: center;
-    align-items: center;
-    display: flex;
-    justify-content: center;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-top: 0px;
-  }
-  .recipes-top{
-    margin-top: 0;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-  }
+/* Input and Label styles */
+.login-box label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 16px;
+  color: #333;
+}
 
-  .back-button:hover {
-    background-color: #574bfc; /* Darken on hover */
-  }
+.login-box input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  background-color: #fafafa;
+  transition: border-color 0.3s ease;
+}
 
-  .recipes{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: auto;
-    margin-top: 0;
-    text-align: center;
-    justify-content: center;
-    width: 100%;
-  }
- 
+/* Change input border color on focus */
+.login-box input:focus {
+  border-color: #6d5dfc;
+  outline: none;
+}
 
-  .recipes ul, .recipes li {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
+/* Button styles */
+.login-box button {
+  width: 100%;
+  padding: 10px;
+  background-color: #6d5dfc;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
 
-  .recipes ul, .recipes li {
-    display: flex;
-    flex-direction: column; 
-    align-items: center;
-    font-size: 20px;
-    text-align: center;
-    justify-content: center;
-    
-  }
+.login-box button:hover {
+  background-color: #574bfc;
+  /* Darken on hover */
+}
 
-  .recipes h3{
-    margin-bottom: 20px;
-    font-size: 25px;
-  }
+/*Recipe page*/
+.home {
+  background-color: #f0f0f0;
+  height: 100vh;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.logo-div {
+  height: auto;
+  width: 100%;
+  display: flex;
+  background-color: white;
+  justify-content: center;
+}
+
+.home img {
+  width: 400px;
+  height: 400px;
+}
+
+.home button {
+  color: white;
+  background-color: #261f88;
+  font-weight: bold;
+  font-size: 22px;
+  margin: 10px 0;
+
+}
+
+.home-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.left {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+}
+
+
+
+.home h1 {
+  margin: 20px;
+  color: #261f88;
+  font-weight: bold;
+  text-align: center;
+}
+
+.categories {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  justify-content: center;
+
+}
+
+.back-button {
+  width: 75px;
+  height: 50px;
+  background-color: #311aff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  text-align: center;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 0px;
+}
+
+.recipes-top {
+  margin-top: 0;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.back-button:hover {
+  background-color: #574bfc;
+  /* Darken on hover */
+}
+
+.recipes {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: auto;
+  margin-top: 0;
+  text-align: center;
+  justify-content: center;
+  width: 100%;
+}
+
+
+.recipes ul,
+.recipes li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.recipes ul,
+.recipes li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 20px;
+  text-align: center;
+  justify-content: center;
+
+}
+
+.recipes h3 {
+  margin-bottom: 20px;
+  font-size: 25px;
+}
+
+.recipe-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.recipe-box {
+  background: #261f88;
+  color: white;
+  padding: 30px 20px;
+  border: 2px solid #a30000;
+  border-radius: 10px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.recipe-box:hover {
+  background: #f7f7f7;
+  border-color: #aaa;
+  transform: scale(1.03);
+}
