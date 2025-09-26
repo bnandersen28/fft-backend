@@ -122,10 +122,10 @@ const Home = () => {
             <img src={benfrank} alt="Ben Franklin" />
             </div>
             <h1>Food For Thought Recipe Manager</h1>
-            <div className='home-row'>
+            <div className='home-column'>
                 <div className='left'>
                     {/* Notes Section */}
-                    <button style={{ padding: "20px", height: "50px" , margin: "10px 0" }} onClick={() => setShowNotes(!showNotes)}>
+                    <button style={{  height: "50px" , margin: "10px 0" }} onClick={() => setShowNotes(!showNotes)}>
                         {showNotes ? "Close Notes" : "Notes"}
                     </button>
 
@@ -150,7 +150,7 @@ const Home = () => {
                             </ul>
                         </div>
                     )}
-                    <button style={{ padding: "20px", height: "50px" }} onClick={() => setShowForm(!showForm)}>
+                    <button style={{ height: "50px" }} onClick={() => setShowForm(!showForm)}>
 
                         {showForm ? "Close Allergen Checker" : "Check Allergens"}
                     </button> 

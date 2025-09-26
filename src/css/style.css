@@ -8,7 +8,6 @@
 /* Body styles */
 body {
   font-family: 'Arial', sans-serif;
-  background-color: #f0f0f0;
   /* Light background for the page */
   min-height: 100vh;
 
@@ -86,7 +85,7 @@ body {
 
 /*Recipe page*/
 .home {
-  background-color: #f0f0f0;
+  background-color: white;
   height: 100vh;
   align-items: center;
   display: flex;
@@ -108,45 +107,48 @@ body {
 
 .home button {
   color: white;
-  background-color: #261f88;
+  background-color: #2367b0;
   font-weight: bold;
   font-size: 22px;
-  margin: 10px 0;
+  padding: 10px 20px;
 
 }
 
-.home-row {
+.home-column {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 }
 
 .left {
-  width: 50%;
+  width: 100%;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: space-evenly;
+  gap: 30px;
 }
 
 
 
 .home h1 {
   margin: 20px;
-  color: #261f88;
+  color: black;
   font-weight: bold;
   text-align: center;
 }
 
 .categories {
-  display: flex;
-  flex-direction: column;
-  width: 50%;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  width: 100%;
+  
 
 }
 
 .back-button {
   width: 75px;
   height: 50px;
-  background-color: #311aff;
+  background-color: #2367b0;
   color: white;
   border: none;
   border-radius: 5px;
@@ -168,7 +170,7 @@ body {
 }
 
 .back-button:hover {
-  background-color: #574bfc;
+  background-color: #2367b0;
   /* Darken on hover */
 }
 
@@ -216,7 +218,7 @@ body {
 }
 
 .recipe-box {
-  background: #261f88;
+  background: #2367b0;
   color: white;
   padding: 30px 20px;
   border: 2px solid #a30000;
