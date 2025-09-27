@@ -30,7 +30,7 @@ const Home = () => {
     const [selectedSides, setSelectedSides] = useState([]); // multiple
     const [selectedDressings, setSelectedDressings] = useState([]); // multiple
     const [selectedDesserts, setSelectedDesserts] = useState([]); // multiple
-    
+
     const [allergens, setAllergens] = useState("");
     const [results, setResults] = useState([]);
     const [ingredients, setIngredients] = useState([]);
@@ -81,7 +81,7 @@ const Home = () => {
                 ...list.filter((r) => r.category === "soups"),
                 ...list.filter((r) => r.category === "salads")
             ]);
-            setAppetizers(list.filter((r) => r.category === "appetizers")); 
+            setAppetizers(list.filter((r) => r.category === "appetizers"));
             setDesserts(list.filter((r) => r.category === "desserts"));
         }
         loadRecipes();
@@ -119,63 +119,65 @@ const Home = () => {
     return (
         <div className="home">
             <div className='logo-div'>
-            <img src={benfrank} alt="Ben Franklin" />
+                <img src={benfrank} alt="Ben Franklin" />
             </div>
-            <h1>Food For Thought Recipe Manager</h1>
-            <div className='home-column'>
-                <div className='left'>
-                    {/* Notes Section */}
-                    <button style={{  height: "50px" , margin: "10px 0" }} onClick={() => setShowNotes(!showNotes)}>
-                        {showNotes ? "Close Notes" : "Notes"}
-                    </button>
+            <h1>Food For Thought</h1>
+            <h1>Recipe Manager</h1>
+            <div className='top'>
+                {/* Notes Section */}
+                <button onClick={() => setShowNotes(!showNotes)}>
+                    {showNotes ? "Close Notes" : "Notes"}
+                </button>
+                <button onClick={() => setShowForm(!showForm)}>
 
-                    {showNotes && (
-                        <div style={{ margin: "10px 0" }}>
-                            <h2>Notes</h2>
-                            <input
-                                type="text"
-                                value={newNote}
-                                onChange={(e) => setNewNote(e.target.value)}
-                                placeholder="Write a note..."
-                                style={{ marginRight: "10px", padding: "5px" }}
-                            />
-                            <button onClick={addNote}>Add</button>
-                            <ul>
-                                {notes.map(note => (
-                                    <li key={note.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                                        {note.text}
-                                        <button onClick={() => deleteNote(note.id)} style={{ marginLeft: "10px" }}>Delete</button>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    )}
-                    <button style={{ height: "50px" }} onClick={() => setShowForm(!showForm)}>
+                    {showForm ? "Close Allergen Checker" : "Check Allergens"}
+                </button>
+            </div>
+            {showNotes && (
+                <div className='show-note'>
+                    <h2>Notes</h2>
+                    <input
+                        type="text"
+                        value={newNote}
+                        onChange={(e) => setNewNote(e.target.value)}
+                        placeholder="Write a note..."
+                        style={{ marginRight: "10px", padding: "5px" }} />
+                    <button onClick={addNote}>Add</button>
+                    <ul>
+                        {notes.map(note => (
+                            <li key={note.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                {note.text}
+                                <button onClick={() => deleteNote(note.id)} style={{ marginLeft: "10px" }}>Delete</button>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
 
-                        {showForm ? "Close Allergen Checker" : "Check Allergens"}
-                    </button> 
 
-                    {showForm && (
-                        <div style={{ margin: "20px auto", maxWidth: "600px" }}>
-                            <h2>Allergen Checker</h2>
+            {showForm && (
+                <div className='show-allergen'>
+                    <h2>Allergen Checker</h2>
 
-                            {/* Entree (single select) */}
-                            <label>Entree:</label>
-                            <select
-                                value={selectedEntree}
-                                onChange={(e) => setSelectedEntree(e.target.value)}
-                            >
-                                <option value="">-- Select Entree --</option>
-                                {entrees.map((r) => (
-                                    <option key={r.id} value={r.id}>
-                                        {r.name}
-                                    </option>
-                                ))}
-                            </select>
+                    {/* Entree (single select) */}
+                    <label>Entree:</label>
+                    <select
+                        value={selectedEntree}
+                        onChange={(e) => setSelectedEntree(e.target.value)}
+                    >
+                        <option value="">-- Select Entree --</option>
+                        {entrees.map((r) => (
+                            <option key={r.id} value={r.id}>
+                                {r.name}
+                            </option>
+                        ))}
+                    </select>
 
-                            <br />
-                            <br />
-                            <label>Appetizers:</label>
+                    <br />
+                    <br />
+                    <div className="checkbox-row">
+                        <div className="show-allergen-column">
+                            <h1>Appetizers:</h1>
                             <div>
                                 {appetizers.map((r) => (
                                     <label key={r.id} style={{ display: "block" }}>
@@ -189,15 +191,16 @@ const Home = () => {
                                                 } else {
                                                     setSelectedAppetizers(selectedAppetizers.filter(id => id !== r.id));
                                                 }
-                                            }}
-                                        />
+                                            }} />
                                         {r.name}
                                     </label>
                                 ))}
                             </div>
+                        </div>
 
-                            {/* Soups + Salads (multi select) */}
-                            <label>Soups/Salads:</label>
+                        {/* Soups + Salads (multi select) */}
+                        <div className="show-allergen-column">
+                            <h1>Soups/Salads:</h1>
                             <div>
 
                                 {soupsSalads.map((r) => (
@@ -212,20 +215,21 @@ const Home = () => {
                                                 } else {
                                                     setSelectedSoupsSalads(selectedSoupsSalads.filter(id => id !== r.id));
                                                 }
-                                            }}
-                                        />
+                                            }} />
                                         {r.name}
                                     </label>
                                 ))}
 
                             </div>
+                        </div>
 
-                            {/* Sides (multi select) */}
-                            <label>Sides:</label>
+                        {/* Sides (multi select) */}
+                        <div className="show-allergen-column">
+                            <h1>Sides:</h1>
                             <div>
                                 {sides.map((r) => (
                                     <label key={r.id} style={{ display: "block" }}>
-                                        < input
+                                        <input
                                             type="checkbox"
                                             value={r.id}
                                             checked={selectedSides.includes(r.id)}
@@ -235,15 +239,16 @@ const Home = () => {
                                                 } else {
                                                     setSelectedSides(selectedSides.filter(id => id !== r.id));
                                                 }
-                                            }}
-                                        />
+                                            }} />
                                         {r.name}
                                     </label>
                                 ))}
                             </div>
+                        </div>
 
-                            {/* Dressings (multi select) */}
-                            <label>Dressings:</label>
+                        {/* Dressings (multi select) */}
+                        <div className="show-allergen-column">
+                            <h1>Dressings:</h1>
                             <div>
                                 {dressings.map((r) => (
                                     <label key={r.id} style={{ display: "block" }}>
@@ -257,29 +262,54 @@ const Home = () => {
                                                 } else {
                                                     setSelectedDressings(selectedDressings.filter(id => id !== r.id));
                                                 }
-                                            }}
-                                        />
+                                            }} />
                                         {r.name}
                                     </label>
                                 ))}
                             </div>
+                        </div>
 
-                            {/* Allergens input */}
-                            <label>Allergens (comma separated):</label>
+                        {/* Desserts (multi select) */}
+                        <div className="show-allergen-column">
+                            <h1>Desserts:</h1>
+                            <div>
+                                {desserts.map((r) => (
+                                    <label key={r.id} style={{ display: "block" }}>
+                                        <input
+                                            type="checkbox"
+                                            value={r.id}
+                                            checked={selectedDesserts.includes(r.id)}
+                                            onChange={(e) => {
+                                                if (e.target.checked) {
+                                                    setSelectedDesserts([...selectedDesserts, r.id]);
+                                                } else {
+                                                    setSelectedDesserts(selectedDesserts.filter(id => id !== r.id));
+                                                }
+                                            }} />
+                                        {r.name}
+                                    </label>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Allergens input */}
+                        <div className="show-allergen-column">
+                            <h1>Allergens (comma separated):</h1>
                             <input
                                 type="text"
                                 value={allergens}
                                 onChange={(e) => setAllergens(e.target.value)}
-                                placeholder="e.g. peanuts, dairy, gluten"
-                            />
+                                placeholder="e.g. peanuts, dairy, gluten" />
 
                             <br />
                             <br />
 
                             <button onClick={handleCheck}>Run Check</button>
+                            </div>
+                         </div>
 
                             {results.length > 0 && (
-                                <div style={{ marginTop: "20px" }}>
+                                <div className="allergen-results">
                                     <h3>Results:</h3>
                                     <ul>
                                         {results.map((msg, idx) => (
@@ -294,73 +324,73 @@ const Home = () => {
                                     </ul>
                                 </div>
                             )}
-                        </div>
-                    )
-                    }
+                       
+                    
                 </div>
-                <div className="categories">
-                    <button
-                        onClick={() => handleCategoryClick('appetizers')}
-                        style={{ margin: '10px', padding: '10px 20px' }}>
-                        Appetizers
-                    </button>
-                    <button
-                        onClick={() => handleCategoryClick('soups')}
-                        style={{ margin: '10px', padding: '10px 20px' }}>
-                        Soups
-                    </button>
-                    <button
-                        onClick={() => handleCategoryClick('salads')}
-                        style={{ margin: '10px', padding: '10px 20px' }}>
-                        Salads
-                    </button>
-                    <button
-                        onClick={() => handleCategoryClick('sandwiches')}
-                        style={{ margin: '10px', padding: '10px 20px' }}>
-                        Sandwiches
-                    </button>
-                    <button
-                        onClick={() => handleCategoryClick('entrees')}
-                        style={{ margin: '10px', padding: '10px 20px' }}>
-                        Entrees
-                    </button>
-                    <button
-                        onClick={() => handleCategoryClick('sides')}
-                        style={{ margin: '10px', padding: '10px 20px' }}>
-                        Sides
-                    </button>
-                    <button
-                        onClick={() => handleCategoryClick('sauces')}
-                        style={{ margin: '10px', padding: '10px 20px' }}>
-                        Sauces, Gravies, Glazes
-                    </button>
-                    <button
-                        onClick={() => handleCategoryClick('dressings')}
-                        style={{ margin: '10px', padding: '10px 20px' }}>
-                        Dressings
-                    </button>
-                    <button
-                        onClick={() => handleCategoryClick('desserts')}
-                        style={{ margin: '10px', padding: '10px 20px' }}>
-                        Desserts
-                    </button>
-                    <button
-                        onClick={() => handleCategoryClick('subrecipes')}
-                        style={{ margin: '10px', padding: '10px 20px' }}>
-                        Sub Recipes
-                    </button>
-                    <button
-                        onClick={() => handleCategoryClick('specials')}
-                        style={{ margin: '10px', padding: '10px 20px' }}>
-                        Specials
-                    </button>
-                    <button
-                        onClick={() => handleCategoryClick('ingredients')}
-                        style={{ margin: '10px', padding: '10px 20px' }}>
-                        Ingredients
-                    </button>
-                </div>
-            </div >
+
+            )}
+            <div className="categories">
+                <button
+                    onClick={() => handleCategoryClick('appetizers')}
+                    style={{ margin: '10px', padding: '10px 20px' }}>
+                    Appetizers
+                </button>
+                <button
+                    onClick={() => handleCategoryClick('soups')}
+                    style={{ margin: '10px', padding: '10px 20px' }}>
+                    Soups
+                </button>
+                <button
+                    onClick={() => handleCategoryClick('salads')}
+                    style={{ margin: '10px', padding: '10px 20px' }}>
+                    Salads
+                </button>
+                <button
+                    onClick={() => handleCategoryClick('sandwiches')}
+                    style={{ margin: '10px', padding: '10px 20px' }}>
+                    Sandwiches
+                </button>
+                <button
+                    onClick={() => handleCategoryClick('entrees')}
+                    style={{ margin: '10px', padding: '10px 20px' }}>
+                    Entrees
+                </button>
+                <button
+                    onClick={() => handleCategoryClick('sides')}
+                    style={{ margin: '10px', padding: '10px 20px' }}>
+                    Sides
+                </button>
+                <button
+                    onClick={() => handleCategoryClick('sauces')}
+                    style={{ margin: '10px', padding: '10px 20px' }}>
+                    Sauces, Gravies, Glazes
+                </button>
+                <button
+                    onClick={() => handleCategoryClick('dressings')}
+                    style={{ margin: '10px', padding: '10px 20px' }}>
+                    Dressings
+                </button>
+                <button
+                    onClick={() => handleCategoryClick('desserts')}
+                    style={{ margin: '10px', padding: '10px 20px' }}>
+                    Desserts
+                </button>
+                <button
+                    onClick={() => handleCategoryClick('subrecipes')}
+                    style={{ margin: '10px', padding: '10px 20px' }}>
+                    Sub Recipes
+                </button>
+                <button
+                    onClick={() => handleCategoryClick('specials')}
+                    style={{ margin: '10px', padding: '10px 20px' }}>
+                    Specials
+                </button>
+                <button
+                    onClick={() => handleCategoryClick('ingredients')}
+                    style={{ margin: '10px', padding: '10px 20px' }}>
+                    Ingredients
+                </button>
+            </div>
         </div>
     );
 };
