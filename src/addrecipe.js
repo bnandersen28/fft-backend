@@ -1,6 +1,7 @@
 //src/api/addrecipe.js
 import { collection, doc, setDoc,updateDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from './firebase';
+import { nameToSlug } from './utils';
 
 /**
  * Adds a recipe to Firestore 'recipes' collection
@@ -13,10 +14,9 @@ import { db } from './firebase';
  * @param {Array<string>} data.crosscontamination - List of cross-contamination ingredients
  */
 export const addRecipe = async ({ name, category, ingredientIds, allergens = [], subingredients = [], crosscontamination = [] }) => {
+    const slug = nameToSlug(name);
 
-    const id = name.trim().toLowerCase().replace(/\s+/g, '-'); // e.g. "Cream Sauce" → "cream-sauce"
-
-    const recipeRef = doc(collection(db, 'recipes'), id); // use custom ID
+    const recipeRef = doc(collection(db, 'recipes')); // use custom ID
     
      await setDoc(recipeRef, {
         name,
@@ -25,9 +25,10 @@ export const addRecipe = async ({ name, category, ingredientIds, allergens = [],
         allergens,
         subingredients,
         crosscontamination,
-        createdAt: serverTimestamp()
+        createdAt: serverTimestamp(), 
+        slug,
     });
-    return id;
+    return recipeRef.id; //stable doc Id
 };
 
 /**
@@ -36,6 +37,13 @@ export const addRecipe = async ({ name, category, ingredientIds, allergens = [],
 export const updateRecipe = async (id, data)=>{
     try{
         const recipeRef= doc(db, "recipes",id);
+        
+        //If updating name, also update slug
+        let updatedData = {...data};
+        if(data.name){
+            updatedData.slug = nameToSlug(data.name);
+        }
+
         await updateDoc(recipeRef, data);
         console.log("Recipe updated successfully");
     }catch(error){

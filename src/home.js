@@ -4,6 +4,7 @@ import benfrank from './benfrank.jpg'; // adjust path as needed
 import { db } from './firebase'; // adjust path as needed
 import { collection, getDocs, addDoc, deleteDoc, doc } from 'firebase/firestore';
 import { useEffect } from 'react';
+import IngredientList from './IngredientList';
 
 
 const Home = () => {
@@ -23,6 +24,11 @@ const Home = () => {
     const [dressings, setDressings] = useState([]);
     const [soupsSalads, setSoupsSalads] = useState([]);
     const [desserts, setDesserts] = useState([]);
+
+    const [showSearch, setShowSearch] = useState(false);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [allRecipes, setAllRecipes] = useState([]);
+    const [searchResults, setSearchResults] = useState([]);
 
     const [selectedEntree, setSelectedEntree] = useState("");
     const [selectedAppetizers, setSelectedAppetizers] = useState([]); // multiple
@@ -83,8 +89,11 @@ const Home = () => {
             ]);
             setAppetizers(list.filter((r) => r.category === "appetizers"));
             setDesserts(list.filter((r) => r.category === "desserts"));
+
+            setAllRecipes(list);
         }
         loadRecipes();
+
     }, []);
 
     const handleCheck = async () => {
@@ -104,6 +113,19 @@ const Home = () => {
         const data = await response.json();
         setResults(data.results || []);
         setIngredients(data.ingredients || []);
+    };
+
+    const handleSearch = (term) => {
+        if (!term.trim()) {
+            setSearchResults([]); // reset if empty
+            return;
+        }
+        const lower = term.toLowerCase();
+        const filtered = allRecipes.filter(r =>
+            r.name.toLowerCase().includes(lower) ||
+            (r.ingredientIds && r.ingredientIds.some(ing => ing.toLowerCase().includes(lower)))
+        );
+        setSearchResults(filtered);
     };
 
     // Utility for multi-select changes
@@ -132,6 +154,10 @@ const Home = () => {
 
                     {showForm ? "Close Allergen Checker" : "Check Allergens"}
                 </button>
+                <button onClick={() => setShowSearch(!showSearch)}>
+                    {showSearch ? "Close Search" : "Search Recipes"}
+                </button>
+
             </div>
             {showNotes && (
                 <div className='show-note'>
@@ -151,6 +177,39 @@ const Home = () => {
                             </li>
                         ))}
                     </ul>
+                </div>
+            )}
+
+            {showSearch && (
+                <div className='show-search'>
+                    <input
+                        type="text"
+                        value={searchTerm}
+                        onChange={(e) => {
+                            setSearchTerm(e.target.value);
+                            handleSearch(e.target.value);
+                        }}
+                        placeholder="Search recipes..."
+                        style={{ marginRight: "10px", padding: "5px" }}
+                    />
+
+                    {searchResults.length > 0 && (
+                        <div style={{ marginTop: "15px" }}>
+                            <h3>Search Results:</h3>
+                            <ul>
+                                {searchResults.map(r => (
+                                    <li
+                                        key={r.id}
+                                        style={{ cursor: "pointer" }}
+                                        onClick={() => navigate(`/recipe/${r.id}`, { state: { category: r.category } })}
+                                    >
+                                        {r.name}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+
                 </div>
             )}
 
@@ -305,27 +364,23 @@ const Home = () => {
                             <br />
 
                             <button onClick={handleCheck}>Run Check</button>
-                            </div>
-                         </div>
+                        </div>
+                    </div>
 
-                            {results.length > 0 && (
-                                <div className="allergen-results">
-                                    <h3>Results:</h3>
-                                    <ul>
-                                        {results.map((msg, idx) => (
-                                            <li key={idx}>{msg}</li>
-                                        ))}
-                                    </ul>
-                                    <h3>Ingredients:</h3>
-                                    <ul>
-                                        {ingredients.map((ing, idx) => (
-                                            <li key={idx}>{ing}</li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            )}
-                       
-                    
+                    {results.length > 0 && (
+                        <div className="allergen-results">
+                            <h3>Results:</h3>
+                            <ul>
+                                {results.map((msg, idx) => (
+                                    <li key={idx}>{msg}</li>
+                                ))}
+                            </ul>
+                            <h3>Ingredients:</h3>
+                            <IngredientList ingredients={ingredients} />
+                        </div>
+                    )}
+
+
                 </div>
 
             )}
@@ -363,7 +418,22 @@ const Home = () => {
                 <button
                     onClick={() => handleCategoryClick('sauces')}
                     style={{ margin: '10px', padding: '10px 20px' }}>
-                    Sauces, Gravies, Glazes
+                    Sauces
+                </button>
+                <button
+                    onClick={() => handleCategoryClick('gravies')}
+                    style={{ margin: '10px', padding: '10px 20px' }}>
+                    Gravies and Glazes
+                </button>
+                <button
+                    onClick={() => handleCategoryClick('spreads')}
+                    style={{ margin: '10px', padding: '10px 20px' }}>
+                    Spreads and Salsas
+                </button>
+                <button
+                    onClick={() => handleCategoryClick('butters')}
+                    style={{ margin: '10px', padding: '10px 20px' }}>
+                    Butters
                 </button>
                 <button
                     onClick={() => handleCategoryClick('dressings')}
@@ -389,6 +459,16 @@ const Home = () => {
                     onClick={() => handleCategoryClick('ingredients')}
                     style={{ margin: '10px', padding: '10px 20px' }}>
                     Ingredients
+                </button>
+                <button
+                    onClick={() => handleCategoryClick('grains')}
+                    style={{ margin: '10px', padding: '10px 20px' }}>
+                    Breads and Pastas
+                </button>
+                <button
+                    onClick={() => handleCategoryClick('seasonings')}
+                    style={{ margin: '10px', padding: '10px 20px' }}>
+                    Seasonings
                 </button>
             </div>
         </div>

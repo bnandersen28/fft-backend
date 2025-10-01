@@ -31,7 +31,10 @@ const allergenMap = {
     tree_nuts: ["almonds", "walnuts", "hazelnuts", "cashews", "pistachios"],
     seafood: ["crab", "anchovies", "shrimp", "tuna", "salmon", "haddock", "clam", "cod"],
     vegan: ["meat", "milk", "cream", "butter", "cheese", "eggs", "honey"],
-    onion: ["onions", "shallots", "scallions" ]
+    onion: ["onions", "shallots", "scallions" ],
+    soy: ["soy", "soybean", "edamame", "miso", "soy sauce"],
+    vegetarian: ["meat", "chicken", "fish", "pork", "beef", "sausage", "crab", "anchovies", "shrimp", "tuna", "salmon", "haddock", "clam", "cod", "steak", "filet"],
+    vegan: ["meat", "chicken", "fish", "pork", "beef", "sausage", "crab", "anchovies", "shrimp", "tuna", "salmon", "haddock", "clam", "cod", "steak", "filet", "milk", "cream", "butter", "cheese", "eggs", "honey"]
 };
 
 async function checkAllergens(mainId, sides = [], dressings = [], additionals = [], allergenList = []) {
@@ -85,13 +88,16 @@ async function checkAllergens(mainId, sides = [], dressings = [], additionals = 
         if (recipe.subingredients?.length) {
             console.log("Checking subingredients");
             for (const subName of recipe.subingredients) {
-                ingredients.push(subName);
                 const subId = nameToId(subName);
                 console.log(`subid: ${subId}`);
-                const subcheck = checkAllergens(subId, [], [], [], allergenList);
-                const subResults = await subcheck;
-                messages = messages.concat(subResults.results);
-                ingredients = ingredients.concat(`Ingredients of ${subName}: ${subResults.ingredients.join(", ")}`);
+                
+                const subcheck = await checkAllergens(subId, [], [], [], allergenList);
+                ingredients.push({
+                    type:"sub",
+                    name: subName,
+                    ingredients: subcheck.ingredients
+                });
+                messages = messages.concat(subcheck.results);
             }
         }
 

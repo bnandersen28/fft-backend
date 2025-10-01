@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { doc, getDoc } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, query, where } from 'firebase/firestore';
 import { db } from './firebase';
 import { updateRecipe } from './addrecipe';
 import { use } from 'react';
 
 //displays information for already existing recipes and allows editing
 const RecipePage = () => {
-    const { id } = useParams();
+    const { slug } = useParams();
     const navigate = useNavigate();
     const location = useLocation();
     const categoryFromNav = location.state?.category || "";
@@ -21,26 +21,37 @@ const RecipePage = () => {
     //Fetch recipe data from Firestore
     useEffect(() => {
         async function fetchRecipe() {
-            const docRef = doc(db, 'recipes', id);
-            const docSnap = await getDoc(docRef);
-            if (docSnap.exists()) {
-                setRecipe(docSnap.data());
-                setFormData(docSnap.data());
-            } else {
-                console.log('No such document!');
+            try {
+                const q = query(collection(db, 'recipes'), where('slug', '==', slug));
+                const querySnap = await getDocs(q);
+
+                if (!querySnap.empty) {
+                    const docData = querySnap.docs[0].data();
+                    setRecipe({ id: querySnap.docs[0].id, ...docData });
+                    setFormData(docData);
+                } else {
+                    console.log('No such document!');
+                }
+            } catch (error) {
+                console.error('Error fetching recipe:', error);
             }
         }
         fetchRecipe();
-    }, [id]);
+    }, [slug]);
 
     const handleInputChange = (field, value) => {
         setFormData(prev => ({ ...prev, [field]: value }));
     };
 
+    //convert sub recipe name to id
+    function nameToId(name) {
+        return name.trim().toLowerCase().replace(/\s+/g, '-');
+    }
+
     //Save edited recipe
     const handleSave = async () => {
         try {
-            await updateRecipe(id, {
+            await updateRecipe(recipe.id, {
                 name: formData.name,
                 category,
                 ingredientIds: Array.isArray(formData.ingredientIds)
@@ -59,74 +70,90 @@ const RecipePage = () => {
                     ? formData.crosscontamination
                     : (formData.crosscontamination ? formData.crosscontamination.split(',').map(c => c.trim()) : []),
             });
-        
-        setEditing(false);
-        navigate(-1); // Go back to previous page
-    } catch (error) {
-        console.error('Error updating recipe:', error);
-    }
-};
 
-if (!recipe) return <p>Loading recipe...</p>;
+            setEditing(false);
+            navigate(-1); // Go back to previous page
+        } catch (error) {
+            console.error('Error updating recipe:', error);
+        }
+    };
 
-return (
-    <div style={{ padding: "20px" }}>
-        <button onClick={() => navigate(-1)}>Back</button>
-        <h2>{recipe.name}</h2>
+    if (!recipe) return <p>Loading recipe...</p>;
 
-        {editing ? (
-            <div>
-                <label>Name:</label>
-                <input
-                    value={formData.name || recipe.name}
-                    onChange={(e) => handleInputChange("name", e.target.value)}
-                />
-                <br />
-                <label>Ingredients:</label>
-                <input
-                    value={formData.ingredientIds || recipe.ingredientIds?.join(", ")}
-                    onChange={(e) => handleInputChange("ingredientIds", e.target.value)}
-                />
-                <br />
-                <label>Allergens:</label>
-                <input
-                    value={formData.allergens || recipe.allergens?.join(", ")}
-                    onChange={(e) => handleInputChange("allergens", e.target.value)}
-                />
-                <br />
-                <label>Sub-Ingredients:</label>
-                <input
-                    value={formData.subingredients || recipe.subingredients?.join(", ")}
-                    onChange={(e) =>
-                        handleInputChange("subingredients", e.target.value)
-                    }
-                />
-                <br />
-                <label>Cross-Contamination:</label>
-                <input
-                    value={
-                        formData.crosscontamination ||
-                        recipe.crosscontamination?.join(", ")
-                    }
-                    onChange={(e) =>
-                        handleInputChange("crosscontamination", e.target.value)
-                    }
-                />
-                <br />
-                <button onClick={handleSave}>Save</button>
-                <button onClick={() => setEditing(false)}>Cancel</button>
-            </div>
-        ) : (
-            <div>
-                <p><strong>Ingredients:</strong> {recipe.ingredientIds?.join(", ") || "None"}</p>
-                <p><strong>Allergens:</strong> {recipe.allergens?.join(", ") || "None"}</p>
-                <p><strong>Sub-Ingredients:</strong> {recipe.subingredients?.join(", ") || "None"}</p>
-                <p><strong>Cross-Contamination:</strong> {recipe.crosscontamination?.join(", ") || "None"}</p>
-                <button onClick={() => setEditing(true)}>Edit</button>
-            </div>
-        )}
-    </div>
-);
+    return (
+        <div className='recipe-details'>
+            <button onClick={() => navigate(-1)}>Back</button>
+            <h2>{recipe.name}</h2>
+
+            {editing ? (
+                <div>
+                    <label>Name:</label>
+                    <input
+                        value={formData.name || recipe.name}
+                        onChange={(e) => handleInputChange("name", e.target.value)}
+                    />
+                    <br />
+                    <label>Ingredients:</label>
+                    <input
+                        value={formData.ingredientIds || recipe.ingredientIds?.join(", ")}
+                        onChange={(e) => handleInputChange("ingredientIds", e.target.value)}
+                    />
+                    <br />
+                    <label>Allergens:</label>
+                    <input
+                        value={formData.allergens || recipe.allergens?.join(", ")}
+                        onChange={(e) => handleInputChange("allergens", e.target.value)}
+                    />
+                    <br />
+                    <label>Sub-Ingredients:</label>
+                    <input
+                        value={formData.subingredients || recipe.subingredients?.join(", ")}
+                        onChange={(e) =>
+                            handleInputChange("subingredients", e.target.value)
+                        }
+                    />
+                    <br />
+                    <label>Cross-Contamination:</label>
+                    <input
+                        value={
+                            formData.crosscontamination ||
+                            recipe.crosscontamination?.join(", ")
+                        }
+                        onChange={(e) =>
+                            handleInputChange("crosscontamination", e.target.value)
+                        }
+                    />
+                    <br />
+                    <button onClick={handleSave}>Save</button>
+                    <button onClick={() => setEditing(false)}>Cancel</button>
+                </div>
+            ) : (
+                <><div>
+                    <p><strong>Ingredients:</strong> {recipe.ingredientIds?.join(", ") || "None"}</p>
+                    <p><strong>Allergens:</strong> {recipe.allergens?.join(", ") || "None"}</p>
+                    <p><strong>Sub-Ingredients:</strong></p>
+                    {recipe.subingredients && recipe.subingredients.length > 0 ? (
+
+                        <ul style={{ listStyle: "none", padding: 0 }}>
+                            {recipe.subingredients.map((sub, idx) => (
+                                <li key={idx}>
+                                    <span className='sub-ingredient'
+                                        onClick={() => navigate(`/recipe/${nameToId(sub)}`, { state: { category } })}
+                                
+                                    >
+                                        {sub}
+                                    </span>
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p>None</p>
+                    )}
+                    <p><strong>Cross-Contamination:</strong> {recipe.crosscontamination?.join(", ") || "None"}</p>
+                </div><button onClick={() => setEditing(true)}>Edit</button></>
+            )}
+        </div>
+    );
 };
 
 export default RecipePage;

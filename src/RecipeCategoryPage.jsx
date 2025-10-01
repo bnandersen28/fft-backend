@@ -128,7 +128,7 @@ const RecipeCategoryPage = () => {
         <>
             <div class="recipes-top">
                 <div className="back-button" onClick={() => window.history.back()}>Back</div>
-                <h2> {category}</h2>
+                <h2> {category.charAt(0).toUpperCase() + category.slice(1)}</h2>
 
                 <button onClick={() => setShowForm(!showForm)}>
                     {'Add Recipe'}
@@ -184,14 +184,13 @@ const RecipeCategoryPage = () => {
                 )}
             </div>
             <div className="recipes">
-                <h3 style={{ marginTop: '40px' }}>{category.charAt(0).toUpperCase() + category.slice(1)} Recipes</h3>
                 <div className="recipe-grid">
                     {recipes.map((recipe) => (
                         <div
                             key={recipe.id}
                             className="recipe-box"
                             onClick={() =>
-                                navigate(`/recipe/${recipe.id}`, { state: { category } })}
+                                navigate(`/recipe/${recipe.slug}`, { state: { category } })}
                         >
                             <h4> {recipe.name}</h4>
                         </div>
